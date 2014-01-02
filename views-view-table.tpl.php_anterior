@@ -1,0 +1,92 @@
+<?php
+// $Id: views-view-table.tpl.php,v 1.8 2009/01/28 00:43:43 merlinofchaos Exp $
+/**
+ * @file views-view-table.tpl.php
+ * Template to display a view as a table.
+ *
+ * - $title : The title of this group of rows.  May be empty.
+ * - $header: An array of header labels keyed by field id.
+ * - $fields: An array of CSS IDs to use for each field id.
+ * - $class: A class or classes to apply to the table, based on settings.
+ * - $row_classes: An array of classes to apply to each row, indexed by row
+ *   number. This matches the index in $rows.
+ * - $rows: An array of row items. Each row is an array of content.
+ *   $rows are keyed by row number, fields within rows are keyed by field ID.
+ * @ingroup views_templates
+ */
+?>
+<form method="GET" action="/framework/modules/lista_grupo_usuarios/borrar_usuarios_grupos.php">
+<table class="<?php// print $class; ?>">
+ <thead>
+ <tr height ="45">
+  <td> <input type="checkbox" name="checktodos"/>Elegir/No elegir a todos</td>
+   <td><input type="submit" value="Enviar mensaje" class="form-submit"></td>
+   <td><input type="submit"  value="Dar de baja del grupo" class="form-submit"></td>
+<?php
+      echo $arg[4]."</br>";
+?>
+	<input type="checkbox" value='<?php echo $node->$nid ?>' name="grupo" checked="true" style="display:none;" />
+ </tr>
+  <?php if (!empty($title)) : ?>
+    <caption><?php print $title; ?></caption>
+  <?php endif; ?>
+    <tr>
+      <?php foreach ($header as $field => $label): ?>
+        <th class="views-field views-field-<?php //print $fields[$field]; ?>">
+          <?php print $label; 
+	?>
+        </th>
+      <?php endforeach; ?>
+    </tr>
+  </thead>
+  <tbody>
+    <?php foreach ($rows as $count => $row): ?>
+      <tr class="<?php print implode(' ', $row_classes[$count]); ?>">
+        <?php foreach ($row as $field => $content): ?>
+          <td class="views-field views-field-<?php //print $fields[$field]; ?>">
+            <?php
+		if ($field<>'managelink'){
+		print $content;
+		   if ($field == 'name'){
+			 Global $user;
+		         $name =$content;
+		   }
+		}
+		if ($field=='managelink'){?>
+			<?php 
+			  // Global $user;
+			   //echo $name=$content;
+			  // echo $uid=$user=>'uid';
+
+			?>
+			   <input type="checkbox" value= '<?php echo $name ?>' name="usuarios[]"/>   			   
+				<span> Enviar mensaje/Eliminar <br></span>			
+		<?php
+
+		//print 'c_1_'.$count;
+		}
+		?>
+          </td>
+        <?php endforeach; ?>
+      </tr>
+    <?php endforeach; ?>
+  </tbody>
+</table>
+</form>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+ 
+	//Checkbox
+	$("input[name=checktodos]").change(function(){
+		$('input[type=checkbox]').each( function() {			
+			if($("input[name=checktodos]:checked").length == 1){
+				this.checked = true;
+			} else {
+				this.checked = false;
+			}
+		});
+	});
+ 
+});
+</script>
